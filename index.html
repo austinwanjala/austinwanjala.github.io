@@ -466,40 +466,73 @@
             <div class="col-lg-8">
                 <div class="contact-form text-center">
                     <div id="success"></div>
-                    <form action="https://formspree.io/f/manwrqqy" method="POST" id="contactForm" novalidate="novalidate">
+                    <form id="contactForm">
                         <div class="form-row">
                             <div class="control-group col-sm-6">
-                                <input type="text" class="form-control p-4" name="name" placeholder="Your Name"
-                                    required="required" data-validation-required-message="Please enter your name" />
-                                <p class="help-block text-danger"></p>
+                                <input type="text" class="form-control p-4" name="name" placeholder="Your Name" required />
                             </div>
                             <div class="control-group col-sm-6">
-                                <input type="email" class="form-control p-4" name="email" placeholder="Your Email"
-                                    required="required" data-validation-required-message="Please enter your email" />
-                                <p class="help-block text-danger"></p>
+                                <input type="email" class="form-control p-4" name="email" placeholder="Your Email" required />
                             </div>
                         </div>
                         <div class="control-group">
-                            <input type="text" class="form-control p-4" name="subject" placeholder="Subject"
-                                required="required" data-validation-required-message="Please enter a subject" />
-                            <p class="help-block text-danger"></p>
+                            <input type="text" class="form-control p-4" name="subject" placeholder="Subject" required />
                         </div>
                         <div class="control-group">
-                            <textarea class="form-control py-3 px-4" rows="5" name="message" placeholder="Message"
-                                required="required" data-validation-required-message="Please enter your message"></textarea>
-                            <p class="help-block text-danger"></p>
+                            <textarea class="form-control py-3 px-4" rows="5" name="message" placeholder="Message" required></textarea>
                         </div>
                         <div>
-                            <button class="btn btn-outline-primary" type="submit" id="sendMessageButton">Send
-                                Message</button>
+                            <button class="btn btn-outline-primary" type="submit" id="sendMessageButton">Send Message</button>
                         </div>
                     </form>
+                    <!-- Confirmation message after submission -->
+                    <div id="confirmationMessage" class="mt-4" style="display: none;">
+                        <p class="text-success">Your message has been sent successfully! Thank you for reaching out.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- Contact End -->
+
+<!-- JavaScript to handle form submission without redirection -->
+<script>
+    document.getElementById("contactForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        // Send the form data using Fetch API
+        fetch("https://formspree.io/f/manwrqqy", {
+            method: "POST",
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                // Show the custom success message
+                document.getElementById("confirmationMessage").style.display = "block";
+
+                // Reset the form
+                form.reset();
+                
+                // Optionally hide the confirmation message after a few seconds
+                setTimeout(function() {
+                    document.getElementById("confirmationMessage").style.display = "none";
+                }, 30000); // Hides after 30 seconds
+            } else {
+                // Handle the error
+                alert("There was an error sending your message. Please try again later.");
+            }
+        }).catch(error => {
+            // Handle network errors
+            alert("Oops! Something went wrong.");
+        });
+    });
+</script>
    
     <!-- Footer Start -->
     <div class="container-fluid bg-primary text-white mt-5 py-5 px-sm-3 px-md-5">
